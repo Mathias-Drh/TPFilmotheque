@@ -3,10 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Filmothèque</title>
-    <link rel="stylesheet" href="../static/styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://bootswatch.com/3/slate/bootstrap.min.css">
 </head>
-<body>
-    <div th:text="${film}"></div>
-    <a href="ajouter-film">Ajouter</a>
+<body style="margin: 0 2em; min-height: 600px;">
+<a href="/" style="text-decoration: none;">
+    <h1 style="text-align: center;">Filmothèque</h1>
+</a>
+<div class="card" style="width: 18rem; margin: auto;">
+    <div class="card-body">
+        <h5 class="card-title" th:text="${film.titre}"></h5>
+        <p class="card-text" th:text="${film.synopsis}"></p>
+        <p th:text="${film.annee}"></p>
+        <p th:text="${film.duree}"></p>
+    </div>
+</div>
+<div style="width: fit-content;margin: auto;">
+    <a href="ajouter-film" class="btn btn-primary">Ajouter</a>
+</div>
 </body>
 </html>

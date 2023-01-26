@@ -1,5 +1,8 @@
 package eni.tpfilmotheque.bo;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,14 +10,15 @@ import lombok.Setter;
 @Setter
 public class Film {
 
-    private long id;
+    @NotBlank(message = "Titre obligatoire")
     private String titre;
     private int annee;
+    @Min(value = 0)
     private int duree;
+    @Size(min = 20, max = 250)
     private String synopsis;
 
     public Film(long id, String titre, int annee, int duree, String synopsis) {
-        this.id = id;
         this.titre = titre;
         this.annee = annee;
         this.duree = duree;
@@ -26,7 +30,6 @@ public class Film {
     @Override
     public String toString() {
         return "Film{" +
-                "id=" + id +
                 ", titre='" + titre + '\'' +
                 ", annee=" + annee +
                 ", duree=" + duree +

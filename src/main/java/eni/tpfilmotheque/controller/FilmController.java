@@ -2,11 +2,12 @@ package eni.tpfilmotheque.controller;
 
 import eni.tpfilmotheque.bo.Film;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.util.ArrayList;
@@ -43,13 +44,13 @@ public class FilmController {
     }
 
     @RequestMapping("/action-ajouter-film")
-    public String addFilm(Model model,
-                          @RequestParam String titre,
-                          @RequestParam int annee,
-                          @RequestParam int duree,
-                          @RequestParam String synopsis,
-                          @ModelAttribute("films") ArrayList<Film> films) {
-        films.add(new Film(1,titre, annee, duree, synopsis));
+    public String addFilm(Model model, @ModelAttribute("films") ArrayList<Film> films, @Valid @ModelAttribute("film") Film film, BindingResult validationResult) {
+        if (validationResult.hasErrors()) {
+            String err = "Vous avez une erreur dans le champs " + validationResult.getFieldError().getField();
+            model.addAttribute("erreur", err);
+            return "ajouterfilm";
+        }
+        films.add(film);
         return "redirect:/liste-films";
     }
 }
