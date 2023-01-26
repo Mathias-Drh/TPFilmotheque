@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Filmothèque</title>
+    <link rel="stylesheet" href="../static/styles/bootstrap.min.css" />
 </head>
 <body>
 <div th:each="film:${films}">
     <p th:text="${film}"></p>
 </div>
+<a href="ajouter-film">Ajouter</a>
 </body>
 </html>
