@@ -16,6 +16,12 @@
             <p class="card-text" th:text="${film.synopsis}"></p>
             <p th:text="${film.annee}"></p>
             <p th:text="${film.duree}"></p>
+            <a class="btn btn-info" th:href="@{/film(id=${film.id})}">Details</a>
+            <form action="action-del-film" method="post">
+                <input type="hidden" th:value="${film.id}" name="id">
+                <input class="btn btn-danger" type="submit" value="Supprimer">
+            </form>
+<!--            <a th:href="${'action-del-film'+film.id}" name="film" th:value="${film}" class="btn btn-danger">Supprimer</a>-->
         </div>
     </div>
 </div>

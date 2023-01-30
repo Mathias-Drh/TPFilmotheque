@@ -1,40 +1,47 @@
 package eni.tpfilmotheque.controller;
 
 import eni.tpfilmotheque.bo.Film;
+import eni.tpfilmotheque.service.FilmService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
 @Controller
-@SessionAttributes("films")
+//@SessionAttributes("films")
 public class FilmController {
 
-    @RequestMapping("/")
-    public String loadView(Model model, HttpSession session) {
-        ArrayList<Film> films = (ArrayList<Film>) session.getAttribute("films");
-        if (films == null) {
-            films = new ArrayList<>();
-            session.setAttribute("films", films);
-        }
-        model.addAttribute("film", new Film(1, "Inception", 2011, 150, "C'est dans un rêve voilà."));
+    private FilmService filmService;
+
+    public FilmController(FilmService filmService){
+        this.filmService = filmService;
+    }
+
+    @RequestMapping("/film{id}")
+    public String loadView(Model model, HttpSession session,
+                           @RequestParam("id")Long id) {
+
+        model.addAttribute("film", filmService.getOneById(id).orElse(new Film()));
+//        ArrayList<Film> films = (ArrayList<Film>) session.getAttribute("films");
+//        if (films == null) {
+//            films = new ArrayList<>();
+//            session.setAttribute("films", films);
+//        }
         return "home";
     }
 
-    @RequestMapping("/liste-films")
+    @RequestMapping({"/liste-films","/"})
     public String loadALl(Model model, HttpSession session) {
-        ArrayList<Film> films = (ArrayList<Film>) session.getAttribute("films");
-        if (films == null) {
-            films = new ArrayList<>();
-            session.setAttribute("films", films);
-        }
-        model.addAttribute("films", films);
+//        ArrayList<Film> films = (ArrayList<Film>) session.getAttribute("films");
+//        if (films == null) {
+//            films = new ArrayList<>();
+//            session.setAttribute("films", films);
+//        }
+        model.addAttribute("films", filmService.getAll());
         return "listefilms";
     }
 
@@ -44,13 +51,28 @@ public class FilmController {
     }
 
     @RequestMapping("/action-ajouter-film")
-    public String addFilm(Model model, @ModelAttribute("films") ArrayList<Film> films, @Valid @ModelAttribute("film") Film film, BindingResult validationResult) {
-        if (validationResult.hasErrors()) {
+    public String addFilm(Model model,
+//                          @Valid @ModelAttribute("film") Film film,
+                          //BindingResult validationResult,
+                          @RequestParam("titre")String titre,
+                          @RequestParam("duree")int duree,
+                          @RequestParam("annee")int annee,
+                          @RequestParam("synopsis")String synopsis
+                          ) {
+        /*if (validationResult.hasErrors()) {
             String err = "Vous avez une erreur dans le champs " + validationResult.getFieldError().getField();
             model.addAttribute("erreur", err);
             return "ajouterfilm";
-        }
-        films.add(film);
+        }*/
+        System.out.println(titre + " " +duree+ " " +annee+ " "+synopsis);
+        filmService.insertOrUpdateFilm(new Film(titre, duree, annee, synopsis));
+        //films.add(film);
         return "redirect:/liste-films";
+    }
+
+    @RequestMapping("/action-del-film")
+    public String delFilm(@RequestParam("id")Long id){
+        filmService.delFilm(filmService.getOneById(id).orElseThrow());
+       return "redirect:/liste-films";
     }
 }
