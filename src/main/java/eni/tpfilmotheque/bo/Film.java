@@ -1,14 +1,14 @@
 package eni.tpfilmotheque.bo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,11 +27,19 @@ public class Film {
     @Size(min = 20, max = 250)
     private String synopsis;
 
+    @ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER) //pas delete
+    @JoinTable(name="GenreFilm",
+            joinColumns= {@JoinColumn(name="film_id")},
+            inverseJoinColumns= {@JoinColumn(name="genre_id")}
+    )
+    private List<Genre> genre;
+
     public Film(String titre, int annee, int duree, String synopsis) {
         this.titre = titre;
         this.annee = annee;
         this.duree = duree;
         this.synopsis = synopsis;
+        this.genre = new ArrayList<>();
     }
 
     public Film() {}

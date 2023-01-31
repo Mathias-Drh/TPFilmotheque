@@ -9,25 +9,55 @@
 <a href="/" style="text-decoration: none;">
     <h1 style="text-align: center;">Filmothèque</h1>
 </a>
-<form action="/action-ajouter-film" style="max-width: 400px; margin: auto;" method="post">
-    <div class="alert alert-danger" role="alert" th:text="${erreur}"></div>
-    <div class="form-group">
-        <label for="titre"></label>
-        <input class="form-control" type="text" name="titre" placeholder="Titre" id="titre">
-    </div>
-    <div class="form-group">
-        <label for="annee"></label>
-        <input class="form-control" type="number" name="annee" placeholder="Année" id="annee">
-    </div>
-    <div class="form-group">
-        <label for="duree"></label>
-        <input class="form-control" type="number" name="duree" placeholder="Durée" id="duree">
-    </div>
-    <div class="form-group">
-        <label for="synopsis"></label>
-        <input class="form-control" type="text" name="synopsis" placeholder="Synopsis" id="synopsis">
-    </div>
-    <input class="btn btn-primary" type="submit">
-</form>
+<!-- SANS OBJET -->
+<div th:unless="${obj}">
+    <form action="/action-ajouter-film" style="max-width: 400px; margin: auto;" method="post">
+        <div class="alert alert-danger" role="alert" th:text="${erreur}"></div>
+        <div class="form-group">
+            <label for="titre"></label>
+            <input class="form-control" type="text" name="titre" placeholder="Titre" id="titre">
+        </div>
+        <div class="form-group">
+            <label for="annee"></label>
+            <input class="form-control" type="number" name="annee" placeholder="Année" id="annee">
+        </div>
+        <div class="form-group">
+            <label for="duree"></label>
+            <input class="form-control" type="number" name="duree" placeholder="Durée" id="duree">
+        </div>
+        <div class="form-group">
+            <label for="synopsis"></label>
+            <input class="form-control" type="text" name="synopsis" placeholder="Synopsis" id="synopsis">
+        </div>
+        <input type="checkbox" name="idG" th:each="genre :${genres}" th:value="${genre.id}" th:text="${genre.id}">
+        <input class="btn btn-primary" type="submit">
+    </form>
+</div>
+<!-- AVEC OBJET -->
+<div th:if="${obj}">
+    <h1>AVEC th:object</h1>
+    <form action="/action-ajouter-film-obj" th:object="${film}" style="max-width: 400px; margin: auto;" method="post">
+        <div class="alert alert-danger" role="alert" th:text="${erreur}"></div>
+        <div class="form-group">
+            <label for="titre"></label>
+            <input class="form-control" type="text" th:field="*{titre}" placeholder="Titre" id="titre">
+        </div>
+        <div class="form-group">
+            <label for="annee"></label>
+            <input class="form-control" type="number" th:field="*{annee}" placeholder="Année" id="annee">
+        </div>
+        <div class="form-group">
+            <label for="duree"></label>
+            <input class="form-control" type="number" th:field="*{duree}" placeholder="Durée" id="duree">
+        </div>
+        <div class="form-group">
+            <label for="synopsis"></label>
+            <input class="form-control" type="text" th:field="*{synopsis}" placeholder="Synopsis" id="synopsis">
+        </div>
+        <input type="checkbox" name="idG" th:each="genre :${genres}" th:value="${genre.id}" th:text="${genre.id}">
+        <input class="btn btn-primary" type="submit">
+    </form>
+</div>
+
 </body>
 </html>

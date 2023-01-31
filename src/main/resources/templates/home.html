@@ -15,6 +15,7 @@
         <p class="card-text" th:text="${film.synopsis}"></p>
         <p th:text="${film.annee}"></p>
         <p th:text="${film.duree}"></p>
+        <p th:each="genre : ${film.genre}" th:text="${genre.libelle}"></p>
     </div>
 </div>
 <div style="width: fit-content;margin: auto;">
